@@ -10,13 +10,33 @@ $(document).ready(function() {
     };
 
     function aiClick(){ //ход ИИ
-        aiStroke = getRandomInt(0,8); //генерируем номер клетки
-        console.log("test = ", arrCells[aiStroke][1]);
-        while(arrCells[aiStroke][1] == true){
-            aiStroke = getRandomInt(0,8);
-            console.log("while aiStroke = ", aiStroke);
+        let check = 0;
+        for(let i = 0; i <= 8; i++){
+          if(arrCells[i][1] == false){
+            let save = list[i][1];
+            list[i][1] = player;
+            if(
+                (list[0][1] == player && list[1][1] == player && list[2][1] == player) ||
+                (list[3][1] == player && list[4][1] == player && list[5][1] == player) ||
+                (list[6][1] == player && list[7][1] == player && list[8][1] == player) ||
+                (list[0][1] == player && list[3][1] == player && list[6][1] == player) ||
+                (list[1][1] == player && list[4][1] == player && list[7][1] == player) ||
+                (list[2][1] == player && list[5][1] == player && list[8][1] == player) ||
+                (list[0][1] == player && list[4][1] == player && list[8][1] == player) ||
+                (list[2][1] == player && list[4][1] == player && list[6][1] == player)
+            ){
+              aiStroke = i;
+              check++;
+            }
+            list[i][1] = save;
+          }
         }
-        console.log("aiStroke = ", aiStroke);
+        if(check == 0){
+            aiStroke = getRandomInt(0,8); //генерируем номер клетки
+            while(arrCells[aiStroke][1] == true){
+                aiStroke = getRandomInt(0,8);
+            }
+        }
         aiStrokeId = "#"+aiStroke;  //создаём id
         arrCells[aiStroke][1] = true;
         if(player === "x"){
@@ -101,6 +121,7 @@ $(document).ready(function() {
         $("table").css("visibility", "visible");
         player = "o";
         enemy = "y";
+        aiClick();
     });
 
     $("td").click(function(e){
